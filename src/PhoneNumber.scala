@@ -10,12 +10,12 @@ object PhoneNumber {
   def from(phoneString: String): Either[TransformError, PhoneNumber] = {
     phoneString match {
       case pattern(code, area, prefix, line) => {
-        Right(PhoneNumber(
-          toInt(code).getOrElse(),
-          toInt(area).getOrElse(),
-          toInt(prefix).getOrElse(),
-          toInt(line).getOrElse())
-        )
+        for {
+          codeNum <- toInt(code)
+          areaNum <- toInt(area)
+          prefixNun <- toInt(prefix)
+          lineNum <- toInt(line)
+        } yield PhoneNumber(codeNum, areaNum, prefixNun, lineNum)
       }
       case _ => Left(TransformError(s"$phoneString didn't parse"))
     }
